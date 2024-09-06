@@ -1,31 +1,42 @@
 const { DataTypes } = require('sequelize')
-const dbConnect = require('../Services/dbConnect')
+const { sequelize } = require('../Services/dbConnect')
+const Users = require('./Users')
 
-const Posts = dbConnect.define('Post', {
-  post_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
+const Posts = sequelize.define(
+  'Post',
+  {
+    post_title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 
-  post_title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+    post_content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
 
-  post_content: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
+    post_image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
 
-  post_image: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
+    post_date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
 
-  post_date: {
-    type: DataTypes.DATE,
-    allowNull: false,
+    UserId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+    },
   },
-})
+  {
+    timestamps: false,
+  },
+)
+
+module.exports = Posts

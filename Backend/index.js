@@ -1,4 +1,20 @@
 require('dotenv').config()
-const dbConnect = require('./Services/dbConnect')
+const { dbConnect, sequelize } = require('./Services/dbConnect')
 
-dbConnect()
+const User = require('./Models/Users')
+const Post = require('./Models/Posts')
+
+User.hasMany(Post)
+Post.belongsTo(User)
+
+const initDatabase = async () => {
+  try {
+    await dbConnect()
+    await sequelize.sync({ alter: true })
+    console.log('Database connected and synced')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+initDatabase()
