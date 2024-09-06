@@ -1,0 +1,12 @@
+   # Node modules
+   node_modules/
+
+   # Env dosyaları
+   .env
+
+   # Log dosyaları
+   *.log
+
+   # IDE dosyaları
+   .vscode/
+   .idea/
