@@ -10,3 +10,8 @@
    # IDE dosyaları
    .vscode/
    .idea/
+node_modules/
+Backend/node_modules/
+
+node_modules/
+Backend/node_modules/
