@@ -1,8 +1,19 @@
 require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
 const { dbConnect, sequelize } = require('./Services/dbConnect')
+const userRoutes = require('./Routes/User')
 
 const User = require('./Models/Users')
 const Post = require('./Models/Posts')
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+
+// API rotalarını ekleyin
+app.use('/api', userRoutes)
 
 User.hasMany(Post)
 Post.belongsTo(User)
@@ -11,9 +22,14 @@ const initDatabase = async () => {
   try {
     await dbConnect()
     await sequelize.sync({ alter: true })
-    console.log('Database connected and synced')
+    console.log('Veritabanı bağlandı ve senkronize edildi')
+
+    const PORT = process.env.PORT || 3000
+    app.listen(PORT, () => {
+      console.log(`Sunucu ${PORT} portunda çalışıyor`)
+    })
   } catch (error) {
-    console.log(error)
+    console.log('Veritabanı başlatma hatası:', error)
   }
 }
 
