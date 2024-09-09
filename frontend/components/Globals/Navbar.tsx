@@ -14,6 +14,8 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import AdbIcon from '@mui/icons-material/Adb'
 import Link from 'next/link'
+import { useUser } from '@/hooks/useUser'
+import { useLogout } from '@/hooks/useLogut'
 
 const pages = ['Anasayfa', 'Search', 'Posts']
 const settings = ['Auth/Login', 'Dashboard', 'Logout']
@@ -21,6 +23,8 @@ const settings = ['Auth/Login', 'Dashboard', 'Logout']
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null)
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
+  const user = useUser()
+  const userLogoutHandler = useLogout()
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget)
@@ -147,11 +151,19 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Link href={`/${setting.toLowerCase()}`}>{setting}</Link>
-                </MenuItem>
-              ))}
+              <MenuItem
+                onClick={handleCloseUserMenu}
+                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}
+              >
+                {user.status === 'failed' ? (
+                  <Link href={settings[0]}>Login / Register</Link>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <Link href={settings[1]}>Dashboard</Link>
+                    <button onClick={userLogoutHandler}>Logout</button>
+                  </div>
+                )}
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

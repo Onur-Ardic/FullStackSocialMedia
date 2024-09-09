@@ -5,16 +5,11 @@ import LoginIcon from '@mui/icons-material/Login'
 import SettingsIcon from '@mui/icons-material/Settings'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 import { useUser } from '@/hooks/useUser'
-import { useDispatch } from 'react-redux'
-import { logout } from '@/libs/features/slice/userSlice'
+import { useLogout } from '@/hooks/useLogut'
 
 const Sidebar = () => {
-  const dispatch = useDispatch()
   const user = useUser()
-  const userLogoutHandler = () => {
-    dispatch(logout())
-    window.location.href = '/auth/login'
-  }
+  const userLogoutHandler = useLogout()
 
   return (
     <article className="flex flex-col gap-6 px-6 w-[300px] mt-12">
