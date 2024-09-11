@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const { dbConnect, sequelize } = require('./Services/dbConnect')
 const userRoutes = require('./Routes/User')
+const postRoutes = require('./Routes/Post')
 
 const User = require('./Models/Users')
 const Post = require('./Models/Posts')
@@ -12,8 +13,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// API rotalarını ekleyin
 app.use('/api', userRoutes)
+app.use('/posts', postRoutes)
 
 User.hasMany(Post)
 Post.belongsTo(User)
