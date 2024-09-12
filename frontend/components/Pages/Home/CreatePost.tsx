@@ -20,6 +20,7 @@ const VisuallyHiddenInput = styled('input')({
 
 export const CreatePost = () => {
   const user = useUser()
+  const showHandle: boolean = true
 
   const [formData, setFormData] = useState({
     UserId: user?.user?.id || '',
@@ -43,7 +44,7 @@ export const CreatePost = () => {
     e.preventDefault()
 
     const form = new FormData()
-    form.append('UserId', formData.UserId)
+    form.append('UserId', String(formData.UserId))
     form.append('post_title', formData.post_title)
     form.append('post_content', formData.post_content)
     form.append('post_date', formData.post_date.toISOString())
@@ -67,43 +68,50 @@ export const CreatePost = () => {
   }
 
   return (
-    <form className="form" onSubmit={handleFormSubmit} encType="multipart/form-data">
-      <div className="create-area-post-title  flex flex-col">
-        <TextField
-          id="standard-basic"
-          label="Post Title"
-          variant="standard"
-          onChange={handleChange}
-          className="mt-3"
-          name="post_title"
-        />
+    <>
+      {showHandle ? (
+        <div className="create-post-area border p-10 mt-11">
+          <form className="form" onSubmit={handleFormSubmit} encType="multipart/form-data">
+            <h1>Create a New Post</h1>
+            <div className="create-area-post-title flex flex-col">
+              <TextField
+                id="standard-basic"
+                label="Post Title"
+                variant="standard"
+                onChange={handleChange}
+                className="mt-3"
+                name="post_title"
+              />
 
-        <textarea
-          onChange={(e) => setFormData({ ...formData, post_content: e.target.value })}
-          name="post_content"
-          id="post-content"
-          placeholder="Write post content here..."
-          className="border p-3 mt-3"
-          rows={5}
-        ></textarea>
+              <textarea
+                onChange={(e) => setFormData({ ...formData, post_content: e.target.value })}
+                name="post_content"
+                id="post-content"
+                placeholder="Write post content here..."
+                className="border p-3 mt-3"
+                rows={5}
+              ></textarea>
 
-        <div className="button mt-3">
-          <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-            Upload files
-            <VisuallyHiddenInput type="file" name="post_image" onChange={handleFileChange} />
-          </Button>
+              <div className="button mt-3">
+                <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
+                  Upload files
+                  <VisuallyHiddenInput type="file" name="post_image" onChange={handleFileChange} />
+                </Button>
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className="ml-3 "
-            startIcon={<SendIcon />}
-          >
-            Post
-          </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className="ml-3 "
+                  startIcon={<SendIcon />}
+                >
+                  Post
+                </Button>
+              </div>
+            </div>
+          </form>
         </div>
-      </div>
-    </form>
+      ) : null}
+    </>
   )
 }

@@ -1,5 +1,4 @@
 const express = require('express')
-const posts = require('../Models/Posts')
 const postService = require('../Services/postService')
 const multer = require('multer')
 
@@ -30,6 +29,23 @@ router.post('/', upload.single('post_image'), async (req, res) => {
     res.status(201).json({ message: 'Blog yazısı başarıyla eklendi', post: result })
   } catch (error) {
     res.status(400).json({ error: error.message })
+  }
+})
+
+router.get('/', async (req, res) => {
+  try {
+    const { UserId, post_title, post_content, post_image, post_date } = req.query
+    const AllPosts = await postService.getAllPosts(
+      UserId,
+      post_title,
+      post_content,
+      post_image,
+      post_date,
+    )
+    res.json(AllPosts)
+  } catch (error) {
+    console.error('Error in GET /posts:', error)
+    res.status(500).json({ error: 'Sunucu hatası' })
   }
 })
 

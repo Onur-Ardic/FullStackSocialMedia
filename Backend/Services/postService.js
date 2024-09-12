@@ -11,6 +11,20 @@ const createBlogPost = async (UserId, post_title, post_content, post_image, post
   return newPost
 }
 
+const getAllPosts = async (UserId, post_title, post_content, post_image, post_date) => {
+  const AllPosts = await posts.findAll({
+    where: {
+      UserId,
+      post_title,
+      post_content,
+      post_image,
+      post_date,
+    },
+  })
+  return AllPosts
+}
+
 module.exports = {
   createBlogPost,
+  getAllPosts,
 }
