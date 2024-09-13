@@ -1,13 +1,34 @@
-const gettAllPosts = async () => {
-  const response = await fetch('http://localhost:5000/posts')
-  const posts = await response.json()
-  return posts
-}
-const AllPosts = async () => {
-  const posts = await gettAllPosts()
-  console.log(posts)
+'use client'
 
-  return <div>AllPosts</div>
+import React, { useState, useEffect, Suspense } from 'react'
+import { gettAllPosts } from '@/service/api'
+import { CreatePost } from './CreatePost'
+const PostCard = React.lazy(() => import('@/components/Globals/PostsCard'))
+
+const AllPosts = () => {
+  const [posts, setPosts] = useState<any[]>([])
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const fetchedPosts = await gettAllPosts()
+      setPosts(fetchedPosts)
+    }
+
+    fetchPosts()
+  }, [])
+
+  const handleNewPost = (newPost: any) => {
+    setPosts([newPost, ...posts])
+  }
+
+  return (
+    <section>
+      <CreatePost onNewPost={handleNewPost} />
+      <Suspense fallback={<div>Loading</div>}>
+        <PostCard posts={posts} />
+      </Suspense>
+    </section>
+  )
 }
 
 export default AllPosts

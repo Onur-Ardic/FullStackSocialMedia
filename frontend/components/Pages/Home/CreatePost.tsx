@@ -3,7 +3,7 @@
 import { Button, styled, TextField } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import SendIcon from '@mui/icons-material/Send'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useUser } from '@/hooks/useUser'
 
 const VisuallyHiddenInput = styled('input')({
@@ -18,17 +18,29 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 })
 
-export const CreatePost = () => {
+interface CreatePostProps {
+  onNewPost: (newPost: any) => void
+}
+
+export const CreatePost: React.FC<CreatePostProps> = ({ onNewPost }) => {
   const user = useUser()
-  const showHandle: boolean = true
 
   const [formData, setFormData] = useState({
-    UserId: user?.user?.id || '',
+    UserId: user.user?.id || '',
     post_title: '',
     post_content: '',
     post_date: new Date(),
     post_image: null,
   })
+
+  useEffect(() => {
+    if (user.status === 'succeeded' && user.user?.id && !formData.UserId) {
+      setFormData((prevData) => ({
+        ...prevData,
+        UserId: user.user?.id || '',
+      }))
+    }
+  }, [user.status, user.user?.id])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -42,6 +54,11 @@ export const CreatePost = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (!formData.UserId) {
+      alert('Kullanıcı kimliği bulunamadı. Lütfen giriş yapın.')
+      return
+    }
 
     const form = new FormData()
     form.append('UserId', String(formData.UserId))
@@ -64,12 +81,15 @@ export const CreatePost = () => {
       const errorData = await post.json()
       throw new Error(errorData.error)
     }
+
+    const newPost = await post.json()
+    onNewPost(newPost.post)
     alert('Post created successfully')
   }
 
   return (
     <>
-      {showHandle ? (
+      {user.status === 'succeeded' ? (
         <div className="create-post-area border p-10 mt-11">
           <form className="form" onSubmit={handleFormSubmit} encType="multipart/form-data">
             <h1>Create a New Post</h1>

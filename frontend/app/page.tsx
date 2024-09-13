@@ -10,8 +10,6 @@ export default function Home() {
         <Sidebar />
       </div>
 
-      <CreatePost />
-
       <section>
         <AllPosts />
       </section>

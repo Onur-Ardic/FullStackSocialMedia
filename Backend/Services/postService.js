@@ -14,6 +14,13 @@ const createBlogPost = async (UserId, post_title, post_content, post_image, post
 const getAllPosts = async (filters) => {
   const AllPosts = await posts.findAll({
     where: filters,
+
+    include: [
+      {
+        model: require('../Models/Users'),
+        attributes: ['user_name'],
+      },
+    ],
   })
   return AllPosts
 }
