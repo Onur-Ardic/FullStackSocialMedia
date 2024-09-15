@@ -1,4 +1,4 @@
-import { formatDate } from '@/hooks/useDate'
+import { formatDate } from '@/hooks/useFormatDate'
 import Image from 'next/image'
 
 const page = async ({ params }: { params: { id: number } }) => {
