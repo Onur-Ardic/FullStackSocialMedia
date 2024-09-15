@@ -15,7 +15,7 @@ const Posts = sequelize.define(
       allowNull: false,
     },
 
-    post_image: {
+    post_media: {
       type: DataTypes.STRING,
       allowNull: true,
     },

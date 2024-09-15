@@ -1,6 +1,4 @@
-'use client'
-
-import { Button, styled, TextField } from '@mui/material'
+import { Button, CircularProgress, styled, TextField } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import SendIcon from '@mui/icons-material/Send'
 import React, { useEffect, useState } from 'react'
@@ -25,12 +23,14 @@ interface CreatePostProps {
 export const CreatePost: React.FC<CreatePostProps> = ({ onNewPost }) => {
   const user = useUser()
 
+  const [loading, setLoading] = useState(false)
+
   const [formData, setFormData] = useState({
     UserId: user.user?.id || '',
     post_title: '',
     post_content: '',
     post_date: new Date(),
-    post_image: null,
+    post_media: null,
   })
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onNewPost }) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFormData({ ...formData, post_image: e.target.files[0] })
+      setFormData({ ...formData, post_media: e.target.files[0] })
     }
   }
 
@@ -60,31 +60,39 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onNewPost }) => {
       return
     }
 
+    setLoading(true)
+
     const form = new FormData()
     form.append('UserId', String(formData.UserId))
     form.append('post_title', formData.post_title)
     form.append('post_content', formData.post_content)
     form.append('post_date', formData.post_date.toISOString())
-    if (formData.post_image) {
-      form.append('post_image', formData.post_image)
+    if (formData.post_media) {
+      form.append('post_media', formData.post_media)
     }
 
-    const post = await fetch('http://localhost:5000/posts', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: form,
-    })
+    try {
+      const post = await fetch('http://localhost:5000/posts', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: form,
+      })
 
-    if (!post.ok) {
-      const errorData = await post.json()
-      throw new Error(errorData.error)
+      if (!post.ok) {
+        const errorData = await post.json()
+        throw new Error(errorData.error)
+      }
+
+      const newPost = await post.json()
+      onNewPost(newPost.post)
+      alert('Post created successfully')
+    } catch (error) {
+      alert('Post oluşturulurken hata oluştu: ' + error.message)
+    } finally {
+      setLoading(false)
     }
-
-    const newPost = await post.json()
-    onNewPost(newPost.post)
-    alert('Post created successfully')
   }
 
   return (
@@ -114,18 +122,24 @@ export const CreatePost: React.FC<CreatePostProps> = ({ onNewPost }) => {
 
               <div className="button mt-3">
                 <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>
-                  Upload files
-                  <VisuallyHiddenInput type="file" name="post_image" onChange={handleFileChange} />
+                  Upload image or video
+                  <VisuallyHiddenInput
+                    type="file"
+                    name="post_media"
+                    accept="image/*,video/*"
+                    onChange={handleFileChange}
+                  />
                 </Button>
 
                 <Button
                   type="submit"
                   variant="contained"
                   color="primary"
-                  className="ml-3 "
+                  className="ml-3"
                   startIcon={<SendIcon />}
+                  disabled={!formData.post_media || loading}
                 >
-                  Post
+                  {loading ? <CircularProgress size={24} /> : 'Post'}
                 </Button>
               </div>
             </div>
