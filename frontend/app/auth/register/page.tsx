@@ -1,5 +1,7 @@
 import RegisterForm from '@/components/Pages/AuthPage/Register/RegisterForm'
-
+export const metadata = {
+  title: 'Register Page',
+}
 const Register = () => {
   return (
     <section className="container mx-auto">

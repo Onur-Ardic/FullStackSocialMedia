@@ -1,9 +1,10 @@
 import { formatDate } from '@/hooks/useFormatDate'
 import Image from 'next/image'
-
+export const metadata = {
+  title: 'Post Details',
+}
 const page = async ({ params }: { params: { id: number } }) => {
   const postId = params.id
-  console.log(postId)
 
   const getPostById = async (postId: number) => {
     const postDetail = await fetch(`http://localhost:5000/posts/${postId}`)

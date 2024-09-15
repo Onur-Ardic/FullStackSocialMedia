@@ -1,4 +1,7 @@
 import LoginForm from '../../../components/Pages/AuthPage/Login/LoginForm'
+export const metadata = {
+  title: 'Login Page',
+}
 const page = () => {
   return (
     <section className="container mx-auto">

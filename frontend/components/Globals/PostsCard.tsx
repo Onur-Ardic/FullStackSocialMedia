@@ -7,8 +7,6 @@ interface PostsCardProps {
 }
 
 const PostsCard: React.FC<PostsCardProps> = ({ posts }) => {
-  console.log(posts)
-
   return (
     <div className="mt-12">
       {posts.map((post: any) => (
