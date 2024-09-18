@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../Services/dbConnect')
-const Users = require('./Users')
 
 const Posts = sequelize.define(
   'Post',

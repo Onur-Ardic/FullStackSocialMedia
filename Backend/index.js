@@ -23,8 +23,6 @@ Post.belongsTo(User)
 const initDatabase = async () => {
   try {
     await dbConnect()
-    await sequelize.sync({ alter: true })
-    console.log('Veritabanı bağlandı ve senkronize edildi')
 
     const PORT = process.env.PORT || 3000
     app.listen(PORT, () => {

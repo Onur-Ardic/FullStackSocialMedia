@@ -10,8 +10,12 @@ const AllPosts = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const fetchedPosts = await gettAllPosts()
-      setPosts(fetchedPosts)
+      try {
+        const fetchedPosts = await gettAllPosts()
+        setPosts(fetchedPosts)
+      } catch (error) {
+        console.error('Hata:', error)
+      }
     }
 
     fetchPosts()

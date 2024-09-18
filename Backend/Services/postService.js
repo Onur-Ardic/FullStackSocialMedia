@@ -39,8 +39,21 @@ const getPostById = async (id) => {
   return post
 }
 
+const getPostByUserId = async (userId) => {
+  const posts = await posts.findAll({
+    where: { UserId },
+    include: [
+      {
+        model: require('../Models/Users'),
+        attributes: ['user_name'],
+      },
+    ],
+  })
+  return posts
+}
 module.exports = {
   createBlogPost,
   getAllPosts,
   getPostById,
+  getPostByUserId,
 }

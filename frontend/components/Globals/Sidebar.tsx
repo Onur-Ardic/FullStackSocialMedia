@@ -26,7 +26,7 @@ const Sidebar = () => {
             </li>
             <li className="sidebar-item flex gap-4 aling-center">
               <AccountBoxIcon />
-              <Link href={'/pages/profile'}>Profile</Link>
+              <Link href={'/pages/userprofile'}>Profile</Link>
             </li>
             <li className="sidebar-item flex gap-4 aling-center">
               <SettingsIcon />
