@@ -7,25 +7,21 @@ import React from 'react'
 import UserPost from './UserPost'
 
 const UserCard = () => {
-  // async kaldırıldı
   const router = useRouter()
   const user = useUser()
   const [posts, setPosts] = useState([])
+  if (user.status === 'idle') {
+    router.push('/')
+  }
 
   useEffect(() => {
     const fetchPosts = async () => {
       const getPosts = await gettAllPosts()
-      if (user.status === 'idle') {
-        router.push('/')
-      }
-
       const userPosts = getPosts.filter((posts: any) => {
         return posts.User?.user_name === user?.user?.username
       })
-
       setPosts(userPosts)
     }
-
     fetchPosts()
   }, [])
 
